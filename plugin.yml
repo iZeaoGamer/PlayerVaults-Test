@@ -1,0 +1,15 @@
+name: PlayerVaults
+main: muqsit\playervaults\PlayerVaults
+api: 3.0.0
+version: 3.2.0
+commands:
+  playervault:
+    default: true
+    aliases: ["pv"]
+permissions:
+  playervaults.vault.1:
+    default: true
+  playervaults.others.edit:
+    default: op
+  playervaults.others.view:
+    default: op
