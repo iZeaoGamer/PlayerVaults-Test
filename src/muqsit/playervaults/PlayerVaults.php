@@ -15,7 +15,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use pocketmine\permission\Permission;
-use pocketmine\permission\PermissionManager;
+use pocketmine\permission\PermissionManager as PM;
 
 class PlayerVaults extends PluginBase{
 
@@ -53,7 +53,7 @@ class PlayerVaults extends PluginBase{
 		if($player->hasPermission("playervaults.vault.unlimited"))
 			return PHP_INT_MAX;
 		/** @var Permission[] $perms */
-		$perms = array_merge(PermissionManager::getInstance()->getDefaultPermissions($player->isOp()), $player->getEffectivePermissions());
+		$perms = array_merge(PM::getInstance()->getDefaultPermissions($player->isOp()), $player->getEffectivePermissions());
 		$perms = array_filter($perms, function(string $name) {
 			return (substr($name, 0, 19) === "playervaults.vault.");
 		}, ARRAY_FILTER_USE_KEY);
