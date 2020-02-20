@@ -38,6 +38,38 @@ class PlayerVaults extends PluginBase{
 			InvMenuHandler::register($this);
 		}
 	}
+		/**
+	 * Get the maximum number of plots a player can claim
+	 *
+	 * @api
+	 *
+	 * @param Player $player
+	 *
+	 * @return int
+	 */
+	public function getMaxVaultsOfPlayer(Player $player) : int {
+		if($player->hasPermission("playervaults.vault.unlimited"))
+			return PHP_INT_MAX;
+		/** @var Permission[] $perms */
+		$perms = array_merge(PermissionManager::getInstance()->getDefaultPermissions($player->isOp()), $player->getEffectivePermissions());
+		$perms = array_filter($perms, function(string $name) {
+			return (substr($name, 0, 19) === "playervaults.vault.");
+		}, ARRAY_FILTER_USE_KEY);
+		if(count($perms) === 0)
+			return 0;
+		krsort($perms, SORT_FLAG_CASE | SORT_NATURAL);
+		/**
+		 * @var string $name
+		 * @var Permission $perm
+		 */
+		foreach($perms as $name => $perm) {
+			$maxVaults = substr($name, 19);
+			if(is_numeric($maxVaults)) {
+				return (int) $maxVaults;
+			}
+		}
+		return 0;
+	}
 
 	private function createDatabase() : void{
 		$this->saveDefaultConfig();
@@ -74,7 +106,9 @@ class PlayerVaults extends PluginBase{
 						return false;
 					}
 				}else{
-					if(!$this->permission_manager->hasPermission($sender, $number)){
+					//if(!$this->permission_manager->hasPermission($sender, $number)){
+					$maxVaults = $this->getMaxVaultsOfPlayer($sender);
+					if($number > $maxVaults){
 						$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
 						return false;
 					}
