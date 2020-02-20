@@ -39,9 +39,9 @@ class PlayerVaults extends PluginBase{
 		}
 	}
 		/**
-	 * Get the maximum number of plots a player can claim
+	 * Get the maximum number of vaults a player can claim
 	 *
-	 * @api
+	 * 
 	 *
 	 * @param Player $player
 	 *
