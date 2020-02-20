@@ -50,12 +50,12 @@ class PlayerVaults extends PluginBase{
 	 * @return int
 	 */
 	public function getMaxVaultsOfPlayer(Player $player) : int {
-		if($player->hasPermission("playervaults.vault.unlimited"))
+		if($player->hasPermission("vault.unlimited"))
 			return PHP_INT_MAX;
 		/** @var Permission[] $perms */
 		$perms = array_merge(PM::getInstance()->getDefaultPermissions($player->isOp()), $player->getEffectivePermissions());
 		$perms = array_filter($perms, function(string $name) {
-			return (substr($name, 0, 19) === "playervaults.vault.");
+			return (substr($name, 0, 6) === "vault.");
 		}, ARRAY_FILTER_USE_KEY);
 		if(count($perms) === 0)
 			return 0;
@@ -65,7 +65,7 @@ class PlayerVaults extends PluginBase{
 		 * @var Permission $perm
 		 */
 		foreach($perms as $name => $perm) {
-			$maxVaults = substr($name, 19);
+			$maxVaults = substr($name, 6);
 			if(is_numeric($maxVaults)) {
 				return (int) $maxVaults;
 			}
@@ -81,8 +81,6 @@ class PlayerVaults extends PluginBase{
 	private function loadConfiguration() : void{
 		Vault::setNameFormat((string) $this->getConfig()->get("inventory-name"));
 
-		$this->saveResource("permission-grouping.yml");
-		$this->permission_manager = new PermissionManager(new Config($this->getDataFolder() . "permission-grouping.yml", Config::YAML));
 	}
 
 	public function getDatabase() : Database{
@@ -101,7 +99,7 @@ class PlayerVaults extends PluginBase{
 				$player = $sender->getName();
 
 				if(isset($args[1]) && strtolower($args[1]) !== strtolower($player)){
-					if($sender->hasPermission("playervaults.others.view")){
+					if($sender->hasPermission("vault.others.view")){
 						$player = $args[1];
 					}else{
 						$sender->sendMessage(TextFormat::RED . "You don't have permission to view " . $args[1] . "'s vault #" . $number . ".");
