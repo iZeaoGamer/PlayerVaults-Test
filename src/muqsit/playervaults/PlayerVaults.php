@@ -14,6 +14,8 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+use pocketmine\permission\Permission;
+use pocketmine\permission\PermissionManager;
 
 class PlayerVaults extends PluginBase{
 
