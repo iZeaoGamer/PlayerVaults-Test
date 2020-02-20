@@ -41,7 +41,7 @@ class PlayerVaults extends PluginBase{
 		}
 	}
 		/**
-	 * Get the maximum number of vaults a player can claim
+	 * Get the maximum number of vaults a player currently has
 	 *
 	 * 
 	 *
