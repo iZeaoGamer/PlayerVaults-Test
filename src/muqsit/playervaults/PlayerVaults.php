@@ -88,7 +88,7 @@ class PlayerVaults extends PluginBase{
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args) : bool{
-		if(!($sender instanceof Player)){
+		if(!($sender instanceof ZectorPlayer)){
 			$sender->sendMessage(TextFormat::RED . "This command can only be executed as a player.");
 			return true;
 		}
@@ -106,10 +106,8 @@ class PlayerVaults extends PluginBase{
 						return false;
 					}
 				}else{
-					//if(!$this->permission_manager->hasPermission($sender, $number)){
-					$maxVaults = $this->getMaxVaultsOfPlayer($sender);
-					if($number > $maxVaults){
-						$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
+				if($number >= $sender->getRank()->getVaultsLimit()){ //private api, sorry!
+					$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
 						return false;
 					}
 				}
