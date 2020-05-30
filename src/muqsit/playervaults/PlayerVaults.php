@@ -16,6 +16,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager as PM;
+use iZeaoGamer\ZectorPEPlayer\ZectorPlayer;
 
 class PlayerVaults extends PluginBase{
 
