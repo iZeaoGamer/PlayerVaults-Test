@@ -108,7 +108,7 @@ class PlayerVaults extends PluginBase{
 					}
 				}else{
 $maxVaults = $this->getMaxVaultsOfPlayer($sender);
-				if($number > $sender->getRank()->getVaultsLimit() or $number > $maxVaults){ //private api, sorry!
+				if($number > $sender->getRank()->getVaultsLimit()) or ($number > $maxVaults){ //private api, sorry!
 					$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
 						return false;
 					}
