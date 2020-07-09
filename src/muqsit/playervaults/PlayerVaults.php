@@ -14,9 +14,6 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-use pocketmine\permission\Permission;
-use pocketmine\permission\PermissionManager as PM;
-use iZeaoGamer\ZectorPEPlayer\ZectorPlayer;
 
 class PlayerVaults extends PluginBase{
 
@@ -50,47 +47,16 @@ class PlayerVaults extends PluginBase{
 	private function loadConfiguration() : void{
 		Vault::setNameFormat((string) $this->getConfig()->get("inventory-name"));
 
+		$this->saveResource("permission-grouping.yml");
+		$this->permission_manager = new PermissionManager(new Config($this->getDataFolder() . "permission-grouping.yml", Config::YAML));
 	}
 
 	public function getDatabase() : Database{
 		return $this->database;
 	}
-			/**
- 	 * Get the maximum number of vaults a player currently has
- 	 *
- 	 * 
- 	 *
- 	 * @param Player $player
- 	 *
- 	 * @return int
- 	 */
- 	public function getMaxVaultsOfPlayer(ZectorPlayer $player) : int {
- 		if($player->hasPermission("vault.unlimited"))
- 			return PHP_INT_MAX;
- 		/** @var Permission[] $perms */
- 		$perms = array_merge(PM::getInstance()->getDefaultPermissions($player->isOp()), $player->getEffectivePermissions());
- 		$perms = array_filter($perms, function(string $name) {
- 			return (substr($name, 0, 6) === "vault.");
- 		}, ARRAY_FILTER_USE_KEY);
- 		if(count($perms) === 0)
- 			return 0;
- 		krsort($perms, SORT_FLAG_CASE | SORT_NATURAL);
- 		/**
- 		 * @var string $name
- 		 * @var Permission $perm
- 		 */
- 		foreach($perms as $name => $perm) {
- 			$maxVaults = substr($name, 6);
- 			if(is_numeric($maxVaults)) {
- 				return (int) $maxVaults;
- 			}
- 		}
- 		return 0;
- 	}
-	 
 
 	public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args) : bool{
-		if(!($sender instanceof ZectorPlayer)){
+		if(!($sender instanceof Player)){
 			$sender->sendMessage(TextFormat::RED . "This command can only be executed as a player.");
 			return true;
 		}
@@ -101,17 +67,15 @@ class PlayerVaults extends PluginBase{
 				$player = $sender->getName();
 
 				if(isset($args[1]) && strtolower($args[1]) !== strtolower($player)){
-					if($sender->hasPermission("vault.others.view")){
+					if($sender->hasPermission("playervaults.others.view")){
 						$player = $args[1];
 					}else{
 						$sender->sendMessage(TextFormat::RED . "You don't have permission to view " . $args[1] . "'s vault #" . $number . ".");
 						return false;
 					}
 				}else{
-$maxVaults = $this->getMaxVaultsOfPlayer($sender);
-					
-				if($number > $maxVaults){
-					$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
+					if(!$this->permission_manager->hasPermission($sender, $number)){
+						$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
 						return false;
 					}
 				}
