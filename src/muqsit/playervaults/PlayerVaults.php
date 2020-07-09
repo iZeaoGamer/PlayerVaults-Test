@@ -14,7 +14,7 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-
+use iZeaoGamer\ZectorPEPlayer\ZectorPlayer; //private API
 class PlayerVaults extends PluginBase{
 
 	/** @var Database */
@@ -56,7 +56,7 @@ class PlayerVaults extends PluginBase{
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args) : bool{
-		if(!($sender instanceof Player)){
+		if(!($sender instanceof ZectorPlayer)){
 			$sender->sendMessage(TextFormat::RED . "This command can only be executed as a player.");
 			return true;
 		}
