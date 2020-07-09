@@ -7,6 +7,7 @@ namespace muqsit\playervaults;
 use Ds\Set;
 use pocketmine\Player;
 use pocketmine\utils\Config;
+use iZeaoGamer\ZectorPEPlayer\ZectorPlayer;
 
 final class PermissionManager{
 
@@ -30,7 +31,7 @@ final class PermissionManager{
 		$this->grouping[$vaults]->add($permission);
 	}
 
-	public function hasPermission(Player $player, int $vault) : bool{
+	public function hasPermission(ZectorPlayer $player, int $vault) : bool{
 		if($player->hasPermission("playervaults.vault.{$vault}")){
 			return true;
 		}
