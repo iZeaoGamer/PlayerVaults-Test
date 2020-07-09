@@ -87,6 +87,7 @@ class PlayerVaults extends PluginBase{
  		}
  		return 0;
  	}
+	 
 
 	public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args) : bool{
 		if(!($sender instanceof ZectorPlayer)){
@@ -108,7 +109,8 @@ class PlayerVaults extends PluginBase{
 					}
 				}else{
 $maxVaults = $this->getMaxVaultsOfPlayer($sender);
-				if($number > $sender->getRank()->getVaultsLimit() || $number > $maxVaults){ //private api, sorry!
+					
+				if($number > $maxVaults){
 					$sender->sendMessage(TextFormat::RED . "You don't have permission to use vault #" . $number . ".");
 						return false;
 					}
